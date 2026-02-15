@@ -1,0 +1,377 @@
+:root {
+  --bg: #f3efe1;
+  --card: #fffdf7;
+  --ink: #1f211b;
+  --muted: #596155;
+  --line: #d9d2bf;
+  --accent: #0f6a3a;
+  --accent-dark: #0b532e;
+  --danger: #b12626;
+  --gold: #d49a20;
+  --warm: #f5e4bd;
+  --mex-red: #9d1d2b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 15% -10%, #fff7d6, transparent 30%),
+    radial-gradient(circle at 90% 0%, #ffe9e9, transparent 34%),
+    linear-gradient(180deg, #faf6ea 0%, var(--bg) 45%);
+  color: var(--ink);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+header {
+  position: relative;
+  background: linear-gradient(120deg, #fffef9, #fff7ef);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem 1rem 1.2rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    var(--accent) 33.33%,
+    #f5f2e7 33.33%,
+    #f5f2e7 66.66%,
+    var(--mex-red) 66.66%,
+    var(--mex-red) 100%
+  );
+}
+
+header h1 {
+  margin-bottom: 0.25rem;
+  color: #1d4f31;
+}
+
+header p {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pickleball-mark {
+  width: 120px;
+  flex: 0 0 auto;
+}
+
+.pickleball-mark svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 24px rgba(22, 39, 20, 0.06);
+  position: relative;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 6px;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(90deg, var(--accent), var(--gold), var(--mex-red));
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.container > .card:nth-of-type(1),
+.container > .card:nth-of-type(2) {
+  border-width: 2px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.collapsible-card summary {
+  cursor: pointer;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.collapsible-card[open] summary {
+  margin-bottom: 1rem;
+}
+
+.example {
+  background: linear-gradient(180deg, #f8f3e6, #f6efdf);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+textarea,
+input[type="text"] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  background: #fffefb;
+  color: var(--ink);
+}
+
+.inline-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+button {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: white;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--accent-dark);
+}
+
+button.secondary {
+  background: #fff9ec;
+  color: #7b4c07;
+  border-color: #d8b678;
+}
+
+button.danger {
+  border-color: var(--danger);
+  background: transparent;
+  color: var(--danger);
+}
+
+.status {
+  min-height: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.status.ok {
+  color: #1f6b3f;
+}
+
+.status.error {
+  color: var(--danger);
+}
+
+.guest-list {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.guest-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fffaf0;
+}
+
+.guest-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.guest-toggle {
+  cursor: pointer;
+  font-weight: 700;
+  margin: -0.15rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.guest-card[open] .guest-toggle {
+  margin-bottom: 0.6rem;
+}
+
+.guest-vote-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.vote-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  border: 1px solid;
+}
+
+.vote-icon.complete {
+  color: #1f6b3f;
+  border-color: #1f6b3f;
+  background: #e8f6ee;
+}
+
+.vote-icon.pending {
+  color: #9a5a00;
+  border-color: #9a5a00;
+  background: #fff3db;
+}
+
+.vote-text {
+  color: var(--muted);
+}
+
+.meal-section {
+  border-top: 1px dashed #d8ccb0;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.meal-section h4 {
+  margin: 0.25rem 0 0.6rem;
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid #c6b894;
+  background: linear-gradient(90deg, #fff4d7, #ffe9b8, #fff4d7);
+  color: #8c1d2a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.option-row {
+  border: 1px dashed #d7caa9;
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(180deg, #fffdf8, #fff8eb);
+}
+
+.option-row p {
+  margin: 0 0 0.45rem;
+}
+
+.score-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.score-buttons label {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #fff;
+}
+
+.result-section {
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.45rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th {
+  color: #234f36;
+  background: #f7f2e3;
+}
+
+.empty {
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pickleball-mark {
+    width: 96px;
+  }
+
+  .inline-form {
+    flex-direction: column;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}
