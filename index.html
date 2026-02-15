@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mexico Menu Preferences</title>
+    <title>Punta Mita Menu Preferences</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -11,8 +11,9 @@
       <header>
         <div class="header-top">
           <div>
-            <h1>Mexico Menu Preferences</h1>
+            <h1>Punta Mita Menu Preferences</h1>
             <p>Let's try to come up with our favorites.</p>
+            <p id="syncStatus" class="sync-status">Local mode (not synced).</p>
           </div>
           <div class="pickleball-mark" aria-hidden="true">
             <svg viewBox="0 0 120 80" role="img">
@@ -88,6 +89,9 @@ B. Mole chicken with tortillas</pre>
       </details>
     </main>
 
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

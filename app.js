@@ -1,5 +1,10 @@
 const MEAL_TYPES = ["breakfast", "lunch", "dinner"];
 const STORAGE_KEY = "menu-picker-state-v1";
+const DEFAULT_SESSION_ID = "punta-mita-2026";
+const FIREBASE_CONFIG = window.MEXICO_MENU_FIREBASE_CONFIG || null;
+const FIREBASE_SESSION_ID = sanitizeSessionId(
+  window.MEXICO_MENU_SESSION_ID || DEFAULT_SESSION_ID
+);
 const DEFAULT_SCALE = [
   { points: -5, label: "I'm allergic or intolerant" },
   { points: 0, label: "Not my favorite" },
@@ -64,6 +69,14 @@ const scaleStatus = document.getElementById("scaleStatus");
 const applyScaleBtn = document.getElementById("applyScaleBtn");
 const resetScaleBtn = document.getElementById("resetScaleBtn");
 const resultsArea = document.getElementById("resultsArea");
+const syncStatus = document.getElementById("syncStatus");
+
+const sync = {
+  enabled: false,
+  applyingRemoteState: false,
+  initialized: false,
+  docRef: null,
+};
 
 importMenuBtn.addEventListener("click", handleImportMenu);
 resetMenuBtn.addEventListener("click", handleResetMenu);
@@ -80,6 +93,7 @@ guestNameInput.addEventListener("keydown", (event) => {
 renderAll();
 menuInput.value = PRESET_MENU_TEXT;
 scaleInput.value = formatScaleText(state.scale);
+initRemoteSync();
 
 function loadState() {
   try {
@@ -111,12 +125,72 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (sync.enabled && !sync.applyingRemoteState) {
+    writeRemoteState();
+  }
 }
 
 function renderAll() {
   renderGuests();
   renderVoting();
   renderResults();
+}
+
+function initRemoteSync() {
+  if (!syncStatus) return;
+  if (!FIREBASE_CONFIG || !window.firebase) {
+    setSyncStatus("Local mode (not synced).");
+    return;
+  }
+  if (sync.initialized) return;
+
+  try {
+    const app = window.firebase.apps?.length
+      ? window.firebase.app()
+      : window.firebase.initializeApp(FIREBASE_CONFIG);
+    const db = window.firebase.firestore(app);
+    sync.docRef = db.collection("menuSessions").doc(FIREBASE_SESSION_ID);
+    sync.enabled = true;
+    sync.initialized = true;
+    setSyncStatus(`Connecting shared session: ${FIREBASE_SESSION_ID}...`);
+
+    sync.docRef.onSnapshot(
+      (snapshot) => {
+        if (!snapshot.exists) {
+          writeRemoteState();
+          setSyncStatus(`Created shared session: ${FIREBASE_SESSION_ID}`);
+          return;
+        }
+
+        const remoteState = parseRemoteState(snapshot.data());
+        sync.applyingRemoteState = true;
+        state = remoteState;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        renderAll();
+        scaleInput.value = formatScaleText(state.scale);
+        sync.applyingRemoteState = false;
+        setSyncStatus(`Synced shared session: ${FIREBASE_SESSION_ID}`);
+      },
+      () => {
+        setSyncStatus("Sync error. Using local mode.");
+      }
+    );
+  } catch {
+    setSyncStatus("Firebase setup issue. Using local mode.");
+  }
+}
+
+function writeRemoteState() {
+  if (!sync.enabled || !sync.docRef) return;
+
+  sync.docRef
+    .set({
+      ...state,
+      updatedAt: window.firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .catch(() => {
+      setSyncStatus("Sync write failed. Changes kept locally.");
+    });
 }
 
 function handleImportMenu() {
@@ -595,6 +669,29 @@ function setScaleStatus(message, isError) {
   scaleStatus.className = `status ${isError ? "error" : "ok"}`;
 }
 
+function setSyncStatus(message) {
+  if (!syncStatus) return;
+  syncStatus.textContent = message;
+}
+
+function parseRemoteState(raw) {
+  const menu = {
+    breakfast: Array.isArray(raw?.menu?.breakfast) ? raw.menu.breakfast : [],
+    lunch: Array.isArray(raw?.menu?.lunch) ? raw.menu.lunch : [],
+    dinner: Array.isArray(raw?.menu?.dinner) ? raw.menu.dinner : [],
+  };
+
+  const hasAnyMenu =
+    menu.breakfast.length > 0 || menu.lunch.length > 0 || menu.dinner.length > 0;
+
+  return {
+    menu: hasAnyMenu ? menu : structuredClone(PRESET_MENU),
+    scale: normalizeScale(raw?.scale),
+    guests: Array.isArray(raw?.guests) ? raw.guests : [],
+    scores: raw?.scores && typeof raw.scores === "object" ? raw.scores : {},
+  };
+}
+
 function normalizeScale(scale) {
   if (!Array.isArray(scale) || scale.length === 0) {
     return structuredClone(DEFAULT_SCALE);
@@ -663,6 +760,16 @@ function parseScaleText(text) {
 
 function formatScaleText(scale) {
   return scale.map((choice) => `${choice.points}=${choice.label}`).join("\n");
+}
+
+function sanitizeSessionId(value) {
+  const cleaned = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  return cleaned || DEFAULT_SESSION_ID;
 }
 
 function createId() {

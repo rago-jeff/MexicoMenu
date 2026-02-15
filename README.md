@@ -5,6 +5,7 @@ Simple web app to rank chef menu options by meal type (breakfast, lunch, dinner)
 ## Run
 
 1. Open `/Users/jeffrago/Documents/CodexCodingProjects/MenuPicker/index.html` in a browser.
+2. For shared multi-browser sync, fill `/Users/jeffrago/Documents/CodexCodingProjects/MenuPicker/firebase-config.js` with your Firebase web app values.
 
 ## How it works
 
@@ -15,6 +16,7 @@ Simple web app to rank chef menu options by meal type (breakfast, lunch, dinner)
 5. Results are ranked by total points per meal type.
 
 Data is saved in browser `localStorage` so refreshes do not lose progress.
+When Firebase config is set, the app syncs to Firestore so all browsers share the same votes.
 
 ## Custom scale example
 
