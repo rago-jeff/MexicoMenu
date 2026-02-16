@@ -305,6 +305,11 @@ function renderGuests() {
 }
 
 function renderVoting() {
+  const openGuestIds = new Set(
+    Array.from(votingArea.querySelectorAll("details.guest-card[open]"))
+      .map((el) => el.dataset.guestId)
+      .filter(Boolean)
+  );
   votingArea.innerHTML = "";
   const orderedScale = getScaleBestToWorst();
 
@@ -321,6 +326,10 @@ function renderVoting() {
   state.guests.forEach((guest) => {
     const guestCard = document.createElement("details");
     guestCard.className = "guest-card";
+    guestCard.dataset.guestId = guest.id;
+    if (openGuestIds.has(guest.id)) {
+      guestCard.open = true;
+    }
 
     const title = document.createElement("summary");
     title.className = "guest-toggle";
