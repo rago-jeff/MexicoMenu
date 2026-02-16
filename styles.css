@@ -237,15 +237,55 @@ button.danger {
 .guest-toggle {
   cursor: pointer;
   font-weight: 700;
-  margin: -0.15rem 0;
+  margin: -0.1rem 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #d9cfb4;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fffdf7, #fdf5df);
+  transition: background-color 120ms ease, transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.guest-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.guest-toggle:hover {
+  background: linear-gradient(180deg, #fff8e7, #fff2d2);
+  box-shadow: 0 4px 12px rgba(122, 89, 28, 0.16);
+}
+
+.guest-toggle:active {
+  transform: translateY(1px);
+}
+
+.guest-name-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.guest-click-icon {
+  color: #8c1d2a;
+  font-size: 0.8rem;
+  transition: transform 120ms ease;
+}
+
+.guest-name {
+  color: #245138;
 }
 
 .guest-card[open] .guest-toggle {
   margin-bottom: 0.6rem;
+  background: linear-gradient(180deg, #fff4da, #ffe9c5);
+}
+
+.guest-card[open] .guest-click-icon {
+  transform: rotate(90deg);
 }
 
 .guest-vote-status {

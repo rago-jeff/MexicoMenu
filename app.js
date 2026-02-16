@@ -334,8 +334,17 @@ function renderVoting() {
     const title = document.createElement("summary");
     title.className = "guest-toggle";
 
+    const nameWrap = document.createElement("span");
+    nameWrap.className = "guest-name-wrap";
+
+    const clickIcon = document.createElement("span");
+    clickIcon.className = "guest-click-icon";
+    clickIcon.textContent = "▶";
+
     const nameSpan = document.createElement("span");
     nameSpan.textContent = guest.name;
+    nameSpan.className = "guest-name";
+    nameWrap.append(clickIcon, nameSpan);
 
     const statusWrap = document.createElement("span");
     statusWrap.className = "guest-vote-status";
@@ -349,7 +358,7 @@ function renderVoting() {
     statusText.dataset.guestText = guest.id;
 
     statusWrap.append(statusIcon, statusText);
-    title.append(nameSpan, statusWrap);
+    title.append(nameWrap, statusWrap);
     guestCard.appendChild(title);
 
     MEAL_TYPES.forEach((mealType) => {
